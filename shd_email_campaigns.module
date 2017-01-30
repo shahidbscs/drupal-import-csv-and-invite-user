@@ -186,7 +186,10 @@ function shd_email_campaigns_actions($form, &$form_state) {
            */
           $batch['operations'][] = array('_shd_email_campaigns_import_line', array(array_map('base64_encode', $line))); 
 
-      // Set recipients email ids.
+      // Set default values, so always variables empty in loop to avoid duplication message
+      $to = $form = $messagetxt = $subject = '';
+      $body = $params = array();
+      // Formate email message.
       $to = $line[4];
       $from = $form_state['values']['email'];
       $messagetxt = $form_state['values']['body'];
@@ -317,7 +320,7 @@ function shd_email_campaigns_form_submit($form, &$form_state) {
         drupal_set_message(t('Some rows failed to import, but unable to create directory for error CSV at %csv_directory', $targs), 'error');
       }
     }
-    drupal_set_message('The CSV import has completed.');
+    drupal_set_message('Thank you, Invitation sent to users.');
   }
   
   
@@ -332,13 +335,13 @@ function shd_email_campaigns_form_submit($form, &$form_state) {
 /**
  * The important part, this is where we "do something" with an individual CSV line
  */
-  function _shd_email_campaigns_import_line($line, $session_nid, &$context) {
+  function _shd_email_campaigns_import_line($line, $session_nid, &$context = array()) {
       
-    $context['results']['rows_imported']++;
+   // $context['results']['rows_imported']++;
     $line = $cleaned_line = array_map('base64_decode', $line);
     
 	//Show the row count by default
-      $context['message'] = t('Importing row !c', array( '!c' => $context['results']['rows_imported'] ));
+    //  $context['message'] = t('Importing row !c', array( '!c' => $context['results']['rows_imported'] ));
     
       //Or, Provide some feedback about the row currently being processed
       $context['message'] = t('Importing %title', array('%title' => $line[0]));
