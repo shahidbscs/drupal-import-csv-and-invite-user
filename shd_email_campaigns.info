@@ -1,0 +1,5 @@
+name = SHD Invite Users
+description = Import CSV and invite users by email.
+dependencies[] = mimemail
+package = custom
+core = 7.x
